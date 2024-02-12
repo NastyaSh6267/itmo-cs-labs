@@ -1,0 +1,61 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Slab5.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Slab5.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Slab5">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel />
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Button Background="White" Foreground="Black" BorderBrush="Black" BorderThickness="2"
+                    Command="{Binding ShowAddTrackDialog}" Content="Новая композиция" Margin="5" />
+            <Button Background="White" Foreground="Black" BorderBrush="Black" BorderThickness="2"
+                    Command="{Binding ShowEditTrackDialog}" Content="Редактировать" Margin="5" />
+            <Button Background="White" Foreground="Black" BorderBrush="Black" BorderThickness="2"
+                    Command="{Binding DeleteTrack}" Content="Удалить" Margin="5" />
+        </StackPanel>
+
+        <!-- Основная часть окна, где расположен список с колонками информации о музыкальных композициях -->
+        <ListBox Grid.Row="1" ItemsSource="{Binding FilteredList}" SelectedItem="{Binding SelectedItem}">
+            <ListBox.Background>
+                <ImageBrush Source="/Assets/stasik.jpg" Stretch="Fill" />
+            </ListBox.Background>
+
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Padding="2" Background="White" Foreground="Black" Text="{Binding Name}"></TextBlock>
+                        <TextBlock Padding="2" Background="Black" Foreground="White" Text="{Binding Author}"></TextBlock>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            
+        </ListBox>
+
+        <!-- Фильтр, располагающийся в нижней части окна -->
+        <DockPanel Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
+            <!-- Элементы фильтра: раскрывающийся список, текстовое поле и кнопка "Найти!" -->
+            <ComboBox SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}" DockPanel.Dock="Left" Margin="5">
+                <!-- Список для выбора критерия поиска -->
+                <ComboBoxItem Content="Название" />
+                <ComboBoxItem Content="Исполнитель" />
+                <ComboBoxItem Content="Название и исполнитель" />
+                <!-- Другие критерии для поиска -->
+            </ComboBox>
+            <TextBox Text="{Binding FilterWord}" DockPanel.Dock="Left" Margin="5" />
+            <Button DockPanel.Dock="Left" Background="White" Foreground="DarkRed" BorderBrush="DarkRed" BorderThickness="2" Command="{Binding Filter}" Content="Найти" Margin="5" />
+        </DockPanel>
+    </Grid>
+
+</Window>
